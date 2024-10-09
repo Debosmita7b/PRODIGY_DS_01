@@ -1,13 +1,65 @@
-Version: 1.0
+#TASK NUMBER 1
+#Create a bar chart or histogram to visualize the distribution of
+#a categorical or continuous variable, such as the distribution of
+#ages or genders in a population
+#Importing data file
+data=read.csv("C:\\Users\\Debosmita\\Downloads\\worldpopulationdata.csv")
+head(data)#Checking the First few rows of the dataset
+tail(data)#Checking the last few rows of the dataset
 
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
+colnames(data)#Checking coloumns of the dataset
 
-EnableCodeIndexing: Yes
-UseSpacesForTab: Yes
-NumSpacesForTab: 2
-Encoding: UTF-8
+summary(data)#Summarizing the data
 
-RnwWeave: Sweave
-LaTeX: pdfLaTeX
+is.na(data)#Checking for missing values in the dataset
+
+length(unique(data$Country.Name))#No. of unique country names
+length(unique(data$Country.Code))#No.of unique country codes
+ 
+data=data[,-1]#Omitting Series.Name
+data=data[,-2]#Omitting Country.Name
+data
+
+#Extracting top 10 countries having highest population
+install.packages("dplyr")
+library(dplyr)
+total_population_data=filter(data,data$Series.Code=="SP.POP.TOTL")
+total_population_data
+total_population_sorted=arrange(total_population_data,total_population_data$X2022)
+total_population_sorted
+total_top_ten_countries=tail(total_population_sorted,n=10)
+total_top_ten_countries
+
+
+#Plotting
+country_code=c("MEX","RUS","BGD","BRA","NGA","PAK","IDN","USA","CHN","IND");country_code
+popn=total_top_ten_countries$X2022
+barplot(popn,xlab="Countries",ylab="Population in year 2022"
+        ,main="Highest Population countries",names.arg=country_code,col = "blue")
+
+#Extracting bottom 10 countries with the lowest population
+total_bottom_ten_countries=head(total_population_sorted,n=10)
+total_bottom_ten_countries
+
+#Plotting
+country_code=c("TUV","NRU","PLW","VGB","MAF","GIB","SMR","MCO","LIE","MHL");country_code
+popn1=total_bottom_ten_countries$X2022
+barplot(popn1,xlab="Countries",ylab="Population in year 2022"
+        ,main="Lowest Population countries",names.arg=country_code,col = "red")
+
+
+#Extracting top 10 countries with highest male population
+male_population_data=data[data$Series.Code=="SP.POP.TOTL.MA.IN",]#Filtering data based on Population
+male_population_data
+male_population_sorted= male_population_data[order(male_population_data$X2022),]#sorting in ascending order
+male_population_sorted
+male_top_ten_countries=tail(male_population_sorted,n=10)
+male_top_ten_countries#top 10 countries having the highest population for 2022
+
+#Plotting
+country_code=c("MEX","RUS","BGD","BRA","NGA","PAK","IDN","USA","CHN","IND");country_code
+popn2=male_top_ten_countries$X2022
+barplot(popn2,xlab="Countries",ylab="Male Population in year 2022"
+        ,main="Highest Male Population countries",names.arg=country_code,col = "green")
+
+#Likewise we draw different plots for series code.
